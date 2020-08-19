@@ -28,11 +28,11 @@ module.exports = appInfo => {
       // host
       host: 'localhost',
       // port
-      port: '3306',
+      port: '3307',
       // username
       user: 'root',
       // password
-      password: 'xjhqhz1314',
+      password: '12345678',
       // database
       database: 'blog',
     },
