@@ -5,9 +5,9 @@ const Advert = () => {
     <div className="ad-div comm-box">
       <div>
         <img src="http://newimg.jspang.com/kaikeba222.png" width="100%" alt="" />
+        {/* <img src="http://newimg.jspang.com/kaikeba222.png" width="100%" alt="" />
         <img src="http://newimg.jspang.com/kaikeba222.png" width="100%" alt="" />
-        <img src="http://newimg.jspang.com/kaikeba222.png" width="100%" alt="" />
-        <img src="http://newimg.jspang.com/kaikeba222.png" width="100%" alt="" />
+        <img src="http://newimg.jspang.com/kaikeba222.png" width="100%" alt="" /> */}
       </div>
     </div>
   )

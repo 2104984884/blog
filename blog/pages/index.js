@@ -8,11 +8,27 @@ import Author from '../components/Author';
 import Advert from '../components/Advert';
 import Footer from '../components/Footer';
 import '../styles/pages/index.css'
-
+import marked from 'marked'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/monokai-sublime.css'
+import servicePath from '../config/apiUrl'
 
 const Home = (list) => {
-  console.log(list)
+  // console.log(list)
   const [mylist, setMylist] = useState(list.data);
+  const renderer = new marked.Renderer()
+  marked.setOptions({
+    renderer: renderer,
+    gfm: true,
+    pedantic: false,
+    sanitize: false,
+    tables: true,
+    breaks: false,
+    smartLists: true,
+    highlight: function (code) {
+      return hljs.highlightAuto(code).value
+    }
+  })
   return (
     <>
       <Head>
@@ -22,7 +38,7 @@ const Home = (list) => {
       <Row className="comm-main" type="flex" justify="center">
         <Col className="comm-left" xs={24} sm={24} md={16} lg={18} xl={14}  >
           <List
-            header={<div></div>}
+            header={<div>&nbsp;&nbsp;&nbsp;最新日志</div>}
             itemLayout='vertical'
             dataSource={mylist}
             renderItem={item => (
@@ -37,7 +53,8 @@ const Home = (list) => {
                   <span><Icon type="folder" />{item.typeName}</span>
                   <span><Icon type="fire" />{item.view_count}</span>
                 </div>
-                <div className="list-context">{item.introduce}</div>
+                <div className="list-context"
+                dangerouslySetInnerHTML={{__html:marked(item.introduce)}}></div>
               </List.Item>
             )}
           />
@@ -57,9 +74,9 @@ const Home = (list) => {
 
 Home.getInitialProps = async () => {
   const promise = new Promise((resolve) => {
-    axios('http://127.0.0.1:7001/default/getArticleList')
+    axios(servicePath.getArticleList)
       .then(res => {
-        console.log('----------', res.data)
+        // console.log('----------', res.data)
         resolve(res.data)
       })
   })

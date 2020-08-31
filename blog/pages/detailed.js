@@ -2,7 +2,6 @@ import React from 'react'
 import Head from 'next/head'
 import axios from 'axios';
 import { Row, Col, Icon, Breadcrumb, Affix } from 'antd'
-import ReactMarkdown from 'react-markdown'
 import MarkNav from 'markdown-navbar';
 import "markdown-navbar/dist/navbar.css";
 import Header from '../components/Header'
@@ -13,10 +12,21 @@ import '../styles/pages/detailed.css';
 import marked from 'marked'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/monokai-sublime.css'
+import Tocify from '../components/tocify.tsx';
+import servicePath  from '../config/apiUrl';
+
 
 
 const Detailed = (props) => {
+  const tocify = new Tocify()
   const renderer = new marked.Renderer()
+
+  renderer.heading = function (text, level, raw) {
+    const anchor = tocify.add(text, level)
+    return `
+      <a id="${anchor}" href="#${anchor}" class="anchor-fix"><h${level}>${text}</h${level}></a>\n
+    `
+  }
 
   marked.setOptions({
     renderer: renderer,
@@ -79,6 +89,7 @@ const Detailed = (props) => {
           <Affix offsetTop={5}>
             <div className="detailed-nav  comm-box">
               <div className="nav-title">文章目录</div>
+              {tocify && tocify.render()}
               <MarkNav
                 className="article-menu"
                 source={html}
@@ -100,7 +111,7 @@ Detailed.getInitialProps = async (context) => {
 
   let id = context.query.id
   const promise = new Promise((resolve) => {
-    axios('http://127.0.0.1:7001/default/getArticleById/' + id)
+    axios(servicePath.getArticleById + id)
       .then(res => {
         console.log(res)
         resolve(res.data.data[0]);
